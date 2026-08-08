@@ -1,0 +1,13 @@
+{
+    "workbench.colorTheme": "Dark Modern",
+    "redhat.telemetry.enabled": true,
+    "claudeCode.preferredLocation": "panel",
+    "workbench.startupEditor": "none",
+    "claudeCode.useTerminal": true,
+    "terminal.integrated.mouseWheelScrollSensitivity": 3,
+    "terminal.integrated.gpuAcceleration": "off",
+    "explorer.confirmDelete": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "nogic.telemetry.enabled": false,
+    "python.analysis.typeCheckingMode": "basic"
+}

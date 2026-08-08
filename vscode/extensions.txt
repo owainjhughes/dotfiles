@@ -1,0 +1,13 @@
+﻿anthropic.claude-code
+damms005.devdb
+ecmel.vscode-html-css
+github.vscode-github-actions
+golang.go
+ms-azuretools.vscode-containers
+ms-dotnettools.vscode-dotnet-runtime
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-vscode-remote.remote-containers
+twxs.cmake
+vitest.explorer
