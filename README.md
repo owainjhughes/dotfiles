@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal agent and dev configuration for Windows, version-controlled so a brand-new machine goes from clone to developing with one script. This exists because the setup that matters day to day — [Claude Code](https://docs.anthropic.com/en/docs/claude-code) instructions and skills, [Codex](https://github.com/openai/codex) instructions, VS Code, git — took a long time to settle and lived on exactly one machine. Now it lives here.
+Personal agent and dev configuration for Windows.
 
 It is a manually curated baseline, not a live mirror: nothing syncs automatically. When the live setup improves, the baseline is refreshed by hand and the diff reviewed before it lands (see [Updating the baseline](#updating-the-baseline)).
 
@@ -52,16 +52,3 @@ git diff
 ```
 
 Export copies the live files back into the repo, re-scrubs `codex/config.toml` (the auto-managed machine-local block is dropped), refreshes the extension list, and removes the shipped skills from the lock file. It never touches git — reviewing the diff and committing what you actually want is the point.
-
-## Deliberately not synced
-
-- Credentials and tokens, ever. The install script only touches the files in the table above.
-- Histories, sessions and agent memories — per-machine state, some of it large.
-- `settings.local.json` — per-machine permission grants.
-
-## Looking Forward
-
-- **Windows-only.** The configs themselves are platform-neutral, so the day a non-Windows machine is real, an `install.sh` against that machine is all that's missing.
-- **Never run on a truly fresh machine.** The install path is tested as a no-op on the machine it was exported from; the honest test is a clean Windows VM.
-- **Skill restore shells out per source repo.** The skills CLI's own lockfile restore is project-scoped and experimental; when a global restore lands, `install.ps1` should use it instead of looping `skills add`.
-- **No `harness/` yet.** The planned home for proven agentic-pipeline config (errors auto-drafted into issues, issues worked autonomously into PRs) once it has been built and earned inside a real project.
