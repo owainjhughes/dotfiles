@@ -3,7 +3,6 @@
     "commit": "",
     "pr": ""
   },
-  "model": "claude-fable-5[1m]",
   "hooks": {
     "PreToolUse": [
       {
@@ -14,6 +13,30 @@
             "command": "node \"$HOME/.claude/hooks/ask-git-gate.js\"",
             "timeout": 10,
             "statusMessage": "Checking for git add/commit/push/PR..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/comment-gate.js\"",
+            "timeout": 15,
+            "statusMessage": "Checking for unnecessary comments..."
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$HOME/.claude/hooks/herdr-agent-state.ps1\" session",
+            "timeout": 10
           }
         ]
       }

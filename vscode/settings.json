@@ -9,5 +9,6 @@
     "explorer.confirmDelete": false,
     "security.workspace.trust.untrustedFiles": "open",
     "nogic.telemetry.enabled": false,
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "terminal.integrated.enableMultiLinePasteWarning": "never"
 }

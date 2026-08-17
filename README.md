@@ -32,8 +32,10 @@ codex     # log in on first run
 | Repo path | Installs to | What |
 |---|---|---|
 | `claude/CLAUDE.md` | `~\.claude\CLAUDE.md` | Global Claude Code instructions — working contract, simplicity rules, README style, commit and git-autonomy policy |
-| `claude/settings.json` | `~\.claude\settings.json` | Model, plugins and marketplaces (auto-install on first run), hook wiring, attribution stripped |
+| `claude/settings.json` | `~\.claude\settings.json` | Plugins and marketplaces (auto-install on first run), hook wiring, effort level, attribution stripped |
 | `claude/hooks/ask-git-gate.js` | `~\.claude\hooks\` | Protected-branch gate: agents commit, push and open PRs freely on feature branches; main/master/develop asks first |
+| `claude/hooks/comment-gate.js` | `~\.claude\hooks\` | Added-comment gate: blocks the first stop of a chain when the working tree has new comment lines, so each one is justified or deleted |
+| `claude/hooks/herdr-agent-state.ps1` | `~\.claude\hooks\` | Reports session state to herdr when running inside one of its panes, and exits immediately when not |
 | `claude/skills/` | `~\.claude\skills\<name>\` | Skills authored here (`implement`, `understand`), shipped with the repo |
 | `codex/AGENTS.md` | `~\.codex\AGENTS.md` | Codex instructions, mirroring the Claude policies |
 | `codex/config.toml` | `~\.codex\config.toml` | Codex model config |
@@ -51,4 +53,4 @@ _When the live setup has improved, from the repo root:_
 git diff
 ```
 
-Export copies the live files back into the repo, re-scrubs `codex/config.toml` (the auto-managed machine-local block is dropped), refreshes the extension list, and removes the shipped skills from the lock file. It never touches git — reviewing the diff and committing what you actually want is the point.
+Export copies the live files back into the repo, refreshes the extension list, removes the shipped skills from the lock file, and scrubs the machine-local state out of `claude/settings.json` and `codex/config.toml`: the current model, the `autoMode` work-environment notes, and the project trust levels, hook hashes and marketplace revisions Codex writes back on its own. It never touches git: reviewing the diff and committing what you actually want is the point. Two consecutive exports produce the same result, so anything showing up in `git diff` is real drift rather than churn.

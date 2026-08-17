@@ -11,6 +11,8 @@ $Files = @(
     @{ repo = 'claude\CLAUDE.md';             live = "$HOME\.claude\CLAUDE.md" }
     @{ repo = 'claude\settings.json';         live = "$HOME\.claude\settings.json" }
     @{ repo = 'claude\hooks\ask-git-gate.js'; live = "$HOME\.claude\hooks\ask-git-gate.js" }
+    @{ repo = 'claude\hooks\comment-gate.js'; live = "$HOME\.claude\hooks\comment-gate.js" }
+    @{ repo = 'claude\hooks\herdr-agent-state.ps1'; live = "$HOME\.claude\hooks\herdr-agent-state.ps1" }
     @{ repo = 'codex\AGENTS.md';              live = "$HOME\.codex\AGENTS.md" }
     @{ repo = 'codex\config.toml';            live = "$HOME\.codex\config.toml" }
     @{ repo = 'git\gitconfig';                live = "$HOME\.gitconfig" }
@@ -31,13 +33,17 @@ if ($Export) {
         Copy-Into $f.live "$Repo\$($f.repo)"
     }
 
-    # config.toml: keep everything outside the auto-managed nogic block
-    $lines = Get-Content "$HOME\.codex\config.toml"
-    $out = @(); $inBlock = $false
-    foreach ($line in $lines) {
-        if ($line -match '^# === nogic-extension begin') { $inBlock = $true; continue }
-        if ($line -match '^# === nogic-extension end') { $inBlock = $false; continue }
-        if (-not $inBlock) { $out += $line }
+    # settings.json: drop the model and the work-specific autoMode notes
+    node -e "const fs=require('fs'),f=process.argv[1],c=JSON.parse(fs.readFileSync(f,'utf8'));delete c.model;delete c.autoMode;fs.writeFileSync(f,JSON.stringify(c,null,2)+'\n')" "$Repo\claude\settings.json"
+
+    # config.toml: drop the model and the per-machine state codex writes back
+    $out = @(); $skip = $false
+    foreach ($line in Get-Content "$HOME\.codex\config.toml") {
+        if ($line -match '^# === nogic-extension (begin|end)') { continue }
+        if ($line -match '^\[') { $skip = $line -match '^\[(projects\.|hooks\.state|mcp_servers\.nogic)' }
+        if ($skip) { continue }
+        if ($line -match '^(model|last_updated|last_revision) *=') { continue }
+        $out += $line
     }
     New-Item -ItemType Directory -Force "$Repo\codex" | Out-Null
     ($out -join "`n").TrimEnd() + "`n" | Out-File "$Repo\codex\config.toml" -Encoding utf8 -NoNewline

@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "The user's full engineering flow for a fix or feature — grill, plan, implement, simplify, verify, Codex review, draft PR."
+description: "The user's full engineering flow for a fix or feature — grill, plan, implement, simplify, verify, Codex review, PR (regular if frontend changed, draft otherwise)."
 disable-model-invocation: true
 ---
 
@@ -38,8 +38,8 @@ The review must be done by Codex — a different model family reviewing is the e
 ### 7. Flywheel check
 Did this run surface a correction or failure that is a repeating class? If yes, route it per the `harness-flywheel` skill and PROPOSE the fixation to the user — they decide; never fixate to the repo unprompted.
 
-### 8. Draft PR
-Push the branch and open a draft PR (`gh pr create --draft --base develop --assignee @me`). Body = the repo template `.github/pull_request_template.md`, filled exactly — add nothing outside its sections:
+### 8. Open PR
+Push the branch and open a PR (`gh pr create --base develop --assignee @me`). Draft status depends on the diff: if the branch touches ANY frontend code, open a REGULAR (non-draft) PR — the preview deploy (`deploy-preview.yml`) skips drafts, and frontend changes need a preview environment. Only backend/docs/tooling-only branches open as `--draft`. Body = the repo template `.github/pull_request_template.md`, filled exactly — add nothing outside its sections:
 - **Summary**: 2-4 plain-English sentences, then one-line bullets only if needed. No trailing "because/so that" clauses.
 - **Screenshots / Demo**: KEEP this section and its placeholder table, always. Fill the table in only if a Playwright loop actually ran during the flow (rare); otherwise leave it exactly as the template has it, so the user can paste images in themselves. Never delete it.
 - **Notes for Reviewer** / **Concerns**: one-sentence bullets, only if there is something real to say; otherwise "None."
@@ -47,4 +47,4 @@ Push the branch and open a draft PR (`gh pr create --draft --base develop --assi
 - No attribution footer, and no attribution line of any kind.
 
 ## Completion
-Report done only when: verify green, Codex findings resolved or explicitly skipped with reasons, draft PR open. Final message: plain-English wrap-up (no jargon), worktree location, PR link.
+Report done only when: verify green, Codex findings resolved or explicitly skipped with reasons, PR open (regular for frontend changes, draft otherwise). Final message: plain-English wrap-up (no jargon), worktree location, PR link.

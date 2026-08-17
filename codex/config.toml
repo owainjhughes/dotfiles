@@ -1,2 +1,39 @@
-﻿model = "gpt-5.6-sol"
-model_reasoning_effort = "high"
+﻿model_reasoning_effort = "high"
+
+[mcp_servers.sentry_cloud]
+url = "https://mcp.sentry.dev/mcp"
+
+[features]
+hooks = true
+
+[windows]
+sandbox = "elevated"
+
+[marketplaces.claude-plugins-official]
+source_type = "git"
+source = "https://github.com/anthropics/claude-plugins-official.git"
+
+[marketplaces.openai-codex]
+source_type = "git"
+source = "https://github.com/openai/codex-plugin-cc.git"
+
+[plugins."deploy-on-aws@claude-plugins-official"]
+enabled = true
+
+[plugins."neon@claude-plugins-official"]
+enabled = true
+
+[plugins."redis-development@claude-plugins-official"]
+enabled = true
+
+[plugins."resend@claude-plugins-official"]
+enabled = true
+
+[plugins."sentry-cli@claude-plugins-official"]
+enabled = true
+
+[plugins."superpowers@claude-plugins-official"]
+enabled = true
+
+[plugins."codex@openai-codex"]
+enabled = true

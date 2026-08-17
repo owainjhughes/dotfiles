@@ -1,5 +1,4 @@
 ﻿anthropic.claude-code
-damms005.devdb
 ecmel.vscode-html-css
 github.vscode-github-actions
 golang.go
