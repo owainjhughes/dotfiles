@@ -5,13 +5,7 @@ const os = require('os')
 const path = require('path')
 
 const HOME = os.homedir()
-const ALLOWED_ROOTS = [
-  'C:/Work/Yourtory/Codebase/Yourtory',
-  'C:/Work/Yourtory/Codebase/YourtoryDocument',
-  'C:/DevProjects',
-  path.join(HOME, '.claude'),
-  path.join(HOME, '.agents'),
-].map(normalize)
+const ALLOWED_ROOTS = [].map(normalize)
 
 const ALWAYS_ALLOWED = new Set(['/dev/null'])
 

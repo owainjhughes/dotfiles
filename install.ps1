@@ -62,6 +62,11 @@ if ($Export) {
     New-Item -ItemType Directory -Force "$Repo\agents" | Out-Null
     $lock | ConvertTo-Json -Depth 10 | Out-File "$Repo\agents\skill-lock.json" -Encoding utf8
 
+    # write-boundary.js: ship without this machine's roots, install asks for them
+    $hook = "$Repo\claude\hooks\write-boundary.js"
+    $js = [IO.File]::ReadAllText($hook) -replace '(?s)const ALLOWED_ROOTS = \[.*?\]', 'const ALLOWED_ROOTS = []'
+    [IO.File]::WriteAllText($hook, $js)
+
     foreach ($name in $VendoredSkills) {
         New-Item -ItemType Directory -Force "$Repo\claude\skills\$name" | Out-Null
         Copy-Item "$HOME\.claude\skills\$name\*" "$Repo\claude\skills\$name\" -Recurse -Force
@@ -94,6 +99,13 @@ foreach ($t in @(@{ cmd = 'claude'; pkg = '@anthropic-ai/claude-code' }, @{ cmd 
 }
 
 foreach ($f in $Files) { Copy-Into "$Repo\$($f.repo)" $f.live }
+
+$hook = "$HOME\.claude\hooks\write-boundary.js"
+$roots = @()
+Write-Host "Folders Claude may touch, one per line (blank line to finish):"
+while ($root = Read-Host 'Allowed root') { $roots += "  '$($root -replace '\\', '/')'," }
+$js = [IO.File]::ReadAllText($hook) -replace 'const ALLOWED_ROOTS = \[\]', "const ALLOWED_ROOTS = [`n$($roots -join "`n")`n]"
+[IO.File]::WriteAllText($hook, $js)
 
 foreach ($name in $VendoredSkills) {
     New-Item -ItemType Directory -Force "$HOME\.claude\skills\$name" | Out-Null

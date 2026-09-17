@@ -40,7 +40,7 @@ codex     # log in on first run
 | `claude/hooks/comment-scan-lib.js` | `~\.claude\hooks\` | Shared comment scanner used by the comment gate and the baseline hook |
 | `claude/hooks/herdr-pane-title.js` | `~\.claude\hooks\` | Mirrors the session's task summary into the herdr pane title and agents panel |
 | `claude/hooks/session-lock.js` | `~\.claude\hooks\` | One session per main checkout: an edit from a second session asks first; linked worktrees are exempt |
-| `claude/hooks/write-boundary.js` | `~\.claude\hooks\` | Blocks file edits and Bash commands that touch paths outside the allowed roots |
+| `claude/hooks/write-boundary.js` | `~\.claude\hooks\` | Blocks file edits and Bash commands that touch paths outside the allowed roots. The repo copy has no roots, so install asks for them and export strips them again |
 | `claude/skills/` | `~\.claude\skills\<name>\` | Skills authored here (`implement`, `understand`, `bro`, `deliver`, `flywheel-review`, `minor`, `review-edit`, `review-noedit`), shipped with the repo |
 | `codex/AGENTS.md` | `~\.codex\AGENTS.md` | Codex instructions, mirroring the Claude policies |
 | `codex/config.toml` | `~\.codex\config.toml` | Codex model config |
