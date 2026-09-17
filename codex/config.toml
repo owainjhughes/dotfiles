@@ -1,10 +1,16 @@
 ﻿model_reasoning_effort = "high"
+approvals_reviewer = "auto_review"
 
 [mcp_servers.sentry_cloud]
 url = "https://mcp.sentry.dev/mcp"
 
+[mcp_servers.terraform]
+command = "docker"
+args = ["run", "-i", "--rm", "hashicorp/terraform-mcp-server"]
+
 [features]
 hooks = true
+memories = true
 
 [windows]
 sandbox = "elevated"
@@ -37,3 +43,7 @@ enabled = true
 
 [plugins."codex@openai-codex"]
 enabled = true
+
+[memories]
+use_memories = true
+generate_memories = true

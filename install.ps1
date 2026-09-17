@@ -41,11 +41,14 @@ if ($Export) {
     # settings.json: drop the model and the work-specific autoMode notes
     node -e "const fs=require('fs'),f=process.argv[1],c=JSON.parse(fs.readFileSync(f,'utf8'));delete c.model;delete c.autoMode;fs.writeFileSync(f,JSON.stringify(c,null,2)+'\n')" "$Repo\claude\settings.json"
 
+    # VS Code settings: drop the work GCP project the Cloud extensions write in
+    node -e "const fs=require('fs'),f=process.argv[1],c=JSON.parse(fs.readFileSync(f,'utf8'));delete c['google.cloud.project'];delete c['jupyter.runStartupCommands'];fs.writeFileSync(f,JSON.stringify(c,null,4)+'\n')" "$Repo\vscode\settings.json"
+
     # config.toml: drop the model and the per-machine state codex writes back
     $out = @(); $skip = $false
     foreach ($line in Get-Content "$HOME\.codex\config.toml") {
         if ($line -match '^# === nogic-extension (begin|end)') { continue }
-        if ($line -match '^\[') { $skip = $line -match '^\[(projects\.|hooks\.state|mcp_servers\.nogic)' }
+        if ($line -match '^\[') { $skip = $line -match '^\[(projects\.|hooks\.state|mcp_servers\.nogic|tui\.model_availability_nux)' }
         if ($skip) { continue }
         if ($line -match '^(model|last_updated|last_revision) *=') { continue }
         $out += $line

@@ -316,7 +316,43 @@
                                    "skillFolderHash":  "a8eda6381157e27b067400b46cdf395da68b8670",
                                    "installedAt":  "2026-08-13T14:35:02.189Z",
                                    "updatedAt":  "2026-08-13T14:35:02.189Z"
-                               }
+                               },
+                   "drawio-skill":  {
+                                        "source":  "Agents365-ai/drawio-skill",
+                                        "sourceType":  "github",
+                                        "sourceUrl":  "https://github.com/Agents365-ai/drawio-skill.git",
+                                        "skillPath":  "skills/drawio-skill/SKILL.md",
+                                        "skillFolderHash":  "271810ef5012003e2eead566c27d02c3f16d1f22",
+                                        "installedAt":  "2026-08-18T09:28:01.068Z",
+                                        "updatedAt":  "2026-08-18T09:28:01.068Z"
+                                    },
+                   "cloud-sql-basics":  {
+                                            "source":  "google/skills",
+                                            "sourceType":  "github",
+                                            "sourceUrl":  "https://github.com/google/skills.git",
+                                            "skillPath":  "skills/cloud/cloud-sql-basics/SKILL.md",
+                                            "skillFolderHash":  "8f1465994b22a632dd70b44025b7f2339720532c",
+                                            "installedAt":  "2026-09-01T06:51:25.031Z",
+                                            "updatedAt":  "2026-09-01T06:51:25.031Z"
+                                        },
+                   "google-cloud-recipe-auth":  {
+                                                    "source":  "google/skills",
+                                                    "sourceType":  "github",
+                                                    "sourceUrl":  "https://github.com/google/skills.git",
+                                                    "skillPath":  "skills/cloud/google-cloud-recipe-auth/SKILL.md",
+                                                    "skillFolderHash":  "a42449bc4dc3d411321e9aa63b8ea12c1e5eaa89",
+                                                    "installedAt":  "2026-09-01T06:51:34.904Z",
+                                                    "updatedAt":  "2026-09-01T06:51:34.904Z"
+                                                },
+                   "terraform-style-guide":  {
+                                                 "source":  "hashicorp/agent-skills",
+                                                 "sourceType":  "github",
+                                                 "sourceUrl":  "https://github.com/hashicorp/agent-skills.git",
+                                                 "skillPath":  "plugins/terraform/skills/terraform-style-guide/SKILL.md",
+                                                 "skillFolderHash":  "e065e597ff55b717f0d74320448057b0cd6659d4",
+                                                 "installedAt":  "2026-09-01T06:51:42.300Z",
+                                                 "updatedAt":  "2026-09-01T06:51:42.300Z"
+                                             }
                },
     "dismissed":  {
                       "findSkillsPrompt":  true
