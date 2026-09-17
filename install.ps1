@@ -13,13 +13,18 @@ $Files = @(
     @{ repo = 'claude\hooks\ask-git-gate.js'; live = "$HOME\.claude\hooks\ask-git-gate.js" }
     @{ repo = 'claude\hooks\comment-gate.js'; live = "$HOME\.claude\hooks\comment-gate.js" }
     @{ repo = 'claude\hooks\herdr-agent-state.ps1'; live = "$HOME\.claude\hooks\herdr-agent-state.ps1" }
-    @{ repo = 'codex\AGENTS.md';              live = "$HOME\.codex\AGENTS.md" }
+    @{ repo = 'claude\hooks\comment-baseline.js'; live = "$HOME\.claude\hooks\comment-baseline.js" }
+    @{ repo = 'claude\hooks\comment-scan-lib.js'; live = "$HOME\.claude\hooks\comment-scan-lib.js" }
+    @{ repo = 'claude\hooks\herdr-pane-title.js'; live = "$HOME\.claude\hooks\herdr-pane-title.js" }
+    @{ repo = 'claude\hooks\session-lock.js'; live = "$HOME\.claude\hooks\session-lock.js" }
+    @{ repo = 'claude\hooks\write-boundary.js'; live = "$HOME\.claude\hooks\write-boundary.js" }
+    @{ repo = 'codex\AGENTS.md';             live = "$HOME\.codex\AGENTS.md" }
     @{ repo = 'codex\config.toml';            live = "$HOME\.codex\config.toml" }
     @{ repo = 'git\gitconfig';                live = "$HOME\.gitconfig" }
     @{ repo = 'vscode\settings.json';         live = "$CodeUser\settings.json" }
     @{ repo = 'vscode\keybindings.json';      live = "$CodeUser\keybindings.json" }
 )
-$VendoredSkills = @('implement', 'understand')
+$VendoredSkills = @('implement', 'understand', 'bro', 'deliver', 'flywheel-review', 'minor', 'review-edit', 'review-noedit')
 
 function Copy-Into($source, $target) {
     $dir = Split-Path $target -Parent
