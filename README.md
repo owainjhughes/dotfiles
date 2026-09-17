@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal agent and dev configuration for Windows.
+Personal agent and dev configuration for Windows, with an install path for Debian and Ubuntu Linux.
 
 It is a manually curated baseline, not a live mirror: nothing syncs automatically. When the live setup improves, the baseline is refreshed by hand and the diff reviewed before it lands (see [Updating the baseline](#updating-the-baseline)).
 
@@ -14,10 +14,20 @@ cd dotfiles
 .\install.ps1
 ```
 
-That installs the missing tools (git, Node and VS Code via [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/); Claude Code and Codex via npm), copies every config into place, restores the third-party skills from the lock file, and installs the VS Code extensions.
+That installs the missing tools (git, Node and VS Code via [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/); Claude Code and Codex via npm), copies every config into place, asks which folders the write-boundary hook should allow, restores the third-party skills from the lock file, and installs the VS Code extensions.
+
+_On Debian or Ubuntu, run in a shell instead:_
+
+```bash
+git clone https://github.com/owainjhughes/dotfiles
+cd dotfiles
+./install.sh
+```
+
+It does the same job with apt, taking Node from [NodeSource](https://github.com/nodesource/distributions) (Ubuntu's own package is too old for Claude Code) and VS Code from Microsoft's apt repo. VS Code config goes to `~/.config/Code/User`. It skips `herdr-agent-state.ps1` and removes its hook entry from `settings.json`, because that file is herdr's PowerShell integration and herdr manages its own. There is no Linux export. The baseline is only refreshed from Windows, so the scrub steps live in one script.
 
 > [!NOTE]
-> If winget had to install Node or VS Code, `npm` and `code` are not on PATH in the terminal that installed them. Open a new terminal and run `.\install.ps1` again — it is idempotent and skips everything already done.
+> If winget had to install Node or VS Code, `npm` and `code` are not on PATH in the terminal that installed them. Open a new terminal and run `.\install.ps1` again. It skips the tools already installed, recopies the config, and asks for the allowed roots again.
 
 _Then the only manual steps, because they are interactive logins:_
 
@@ -36,7 +46,12 @@ codex     # log in on first run
 | `claude/hooks/ask-git-gate.js` | `~\.claude\hooks\` | Protected-branch gate: agents commit, push and open PRs freely on feature branches; main/master/develop asks first |
 | `claude/hooks/comment-gate.js` | `~\.claude\hooks\` | Added-comment gate: blocks the first stop of a chain when the working tree has new comment lines, so each one is justified or deleted |
 | `claude/hooks/herdr-agent-state.ps1` | `~\.claude\hooks\` | Reports session state to herdr when running inside one of its panes, and exits immediately when not |
-| `claude/skills/` | `~\.claude\skills\<name>\` | Skills authored here (`implement`, `understand`), shipped with the repo |
+| `claude/hooks/comment-baseline.js` | `~\.claude\hooks\` | Snapshots the comment lines already in the working tree at session start, so the comment gate only flags lines the session adds |
+| `claude/hooks/comment-scan-lib.js` | `~\.claude\hooks\` | Shared comment scanner used by the comment gate and the baseline hook |
+| `claude/hooks/herdr-pane-title.js` | `~\.claude\hooks\` | Mirrors the session's task summary into the herdr pane title and agents panel |
+| `claude/hooks/session-lock.js` | `~\.claude\hooks\` | One session per main checkout: an edit from a second session asks first; linked worktrees are exempt |
+| `claude/hooks/write-boundary.js` | `~\.claude\hooks\` | Blocks file edits and Bash commands that touch paths outside the allowed roots. The repo copy has no roots, so install asks for them and export strips them again |
+| `claude/skills/` | `~\.claude\skills\<name>\` | Skills authored here (`implement`, `understand`, `bro`, `deliver`, `flywheel-review`, `minor`, `review-edit`, `review-noedit`), shipped with the repo |
 | `codex/AGENTS.md` | `~\.codex\AGENTS.md` | Codex instructions, mirroring the Claude policies |
 | `codex/config.toml` | `~\.codex\config.toml` | Codex model config |
 | `agents/skill-lock.json` | `~\.agents\.skill-lock.json` | Third-party skills manifest — install restores each one from its GitHub source rather than vendoring it |

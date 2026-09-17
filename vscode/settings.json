@@ -9,6 +9,20 @@
     "explorer.confirmDelete": false,
     "security.workspace.trust.untrustedFiles": "open",
     "nogic.telemetry.enabled": false,
+    "nogic.walkthrough.enabledClis": [
+        "claude"
+    ],
     "python.analysis.typeCheckingMode": "basic",
-    "terminal.integrated.enableMultiLinePasteWarning": "never"
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "yaml.disableSchemaDetection": [
+        "**/.github/workflows/*.yml",
+        "**/.github/workflows/*.yaml",
+        "**/.gitea/workflows/*.yml",
+        "**/.gitea/workflows/*.yaml",
+        "**/.forgejo/workflows/*.yml",
+        "**/.forgejo/workflows/*.yaml"
+    ],
+    "explorer.confirmDragAndDrop": false,
+    "google.cloud.region": "asia-northeast1",
+    "jupyter.jupyterLaunchTimeout": 300000
 }

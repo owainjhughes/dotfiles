@@ -13,13 +13,18 @@ $Files = @(
     @{ repo = 'claude\hooks\ask-git-gate.js'; live = "$HOME\.claude\hooks\ask-git-gate.js" }
     @{ repo = 'claude\hooks\comment-gate.js'; live = "$HOME\.claude\hooks\comment-gate.js" }
     @{ repo = 'claude\hooks\herdr-agent-state.ps1'; live = "$HOME\.claude\hooks\herdr-agent-state.ps1" }
-    @{ repo = 'codex\AGENTS.md';              live = "$HOME\.codex\AGENTS.md" }
+    @{ repo = 'claude\hooks\comment-baseline.js'; live = "$HOME\.claude\hooks\comment-baseline.js" }
+    @{ repo = 'claude\hooks\comment-scan-lib.js'; live = "$HOME\.claude\hooks\comment-scan-lib.js" }
+    @{ repo = 'claude\hooks\herdr-pane-title.js'; live = "$HOME\.claude\hooks\herdr-pane-title.js" }
+    @{ repo = 'claude\hooks\session-lock.js'; live = "$HOME\.claude\hooks\session-lock.js" }
+    @{ repo = 'claude\hooks\write-boundary.js'; live = "$HOME\.claude\hooks\write-boundary.js" }
+    @{ repo = 'codex\AGENTS.md';             live = "$HOME\.codex\AGENTS.md" }
     @{ repo = 'codex\config.toml';            live = "$HOME\.codex\config.toml" }
     @{ repo = 'git\gitconfig';                live = "$HOME\.gitconfig" }
     @{ repo = 'vscode\settings.json';         live = "$CodeUser\settings.json" }
     @{ repo = 'vscode\keybindings.json';      live = "$CodeUser\keybindings.json" }
 )
-$VendoredSkills = @('implement', 'understand')
+$VendoredSkills = @('implement', 'understand', 'bro', 'deliver', 'flywheel-review', 'minor', 'review-edit', 'review-noedit')
 
 function Copy-Into($source, $target) {
     $dir = Split-Path $target -Parent
@@ -36,11 +41,14 @@ if ($Export) {
     # settings.json: drop the model and the work-specific autoMode notes
     node -e "const fs=require('fs'),f=process.argv[1],c=JSON.parse(fs.readFileSync(f,'utf8'));delete c.model;delete c.autoMode;fs.writeFileSync(f,JSON.stringify(c,null,2)+'\n')" "$Repo\claude\settings.json"
 
+    # VS Code settings: drop the work GCP project the Cloud extensions write in
+    node -e "const fs=require('fs'),f=process.argv[1],c=JSON.parse(fs.readFileSync(f,'utf8'));delete c['google.cloud.project'];delete c['jupyter.runStartupCommands'];fs.writeFileSync(f,JSON.stringify(c,null,4)+'\n')" "$Repo\vscode\settings.json"
+
     # config.toml: drop the model and the per-machine state codex writes back
     $out = @(); $skip = $false
     foreach ($line in Get-Content "$HOME\.codex\config.toml") {
         if ($line -match '^# === nogic-extension (begin|end)') { continue }
-        if ($line -match '^\[') { $skip = $line -match '^\[(projects\.|hooks\.state|mcp_servers\.nogic)' }
+        if ($line -match '^\[') { $skip = $line -match '^\[(projects\.|hooks\.state|mcp_servers\.nogic|tui\.model_availability_nux)' }
         if ($skip) { continue }
         if ($line -match '^(model|last_updated|last_revision) *=') { continue }
         $out += $line
@@ -53,6 +61,11 @@ if ($Export) {
     foreach ($name in $VendoredSkills) { $lock.skills.PSObject.Properties.Remove($name) }
     New-Item -ItemType Directory -Force "$Repo\agents" | Out-Null
     $lock | ConvertTo-Json -Depth 10 | Out-File "$Repo\agents\skill-lock.json" -Encoding utf8
+
+    # write-boundary.js: ship without this machine's roots, install asks for them
+    $hook = "$Repo\claude\hooks\write-boundary.js"
+    $js = [IO.File]::ReadAllText($hook) -replace '(?s)const ALLOWED_ROOTS = \[.*?\]', 'const ALLOWED_ROOTS = []'
+    [IO.File]::WriteAllText($hook, $js)
 
     foreach ($name in $VendoredSkills) {
         New-Item -ItemType Directory -Force "$Repo\claude\skills\$name" | Out-Null
@@ -86,6 +99,13 @@ foreach ($t in @(@{ cmd = 'claude'; pkg = '@anthropic-ai/claude-code' }, @{ cmd 
 }
 
 foreach ($f in $Files) { Copy-Into "$Repo\$($f.repo)" $f.live }
+
+$hook = "$HOME\.claude\hooks\write-boundary.js"
+$roots = @()
+Write-Host "Folders Claude may touch, one per line (blank line to finish):"
+while ($root = Read-Host 'Allowed root') { $roots += "  '$($root -replace '\\', '/')'," }
+$js = [IO.File]::ReadAllText($hook) -replace 'const ALLOWED_ROOTS = \[\]', "const ALLOWED_ROOTS = [`n$($roots -join "`n")`n]"
+[IO.File]::WriteAllText($hook, $js)
 
 foreach ($name in $VendoredSkills) {
     New-Item -ItemType Directory -Force "$HOME\.claude\skills\$name" | Out-Null

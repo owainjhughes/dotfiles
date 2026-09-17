@@ -30,3 +30,8 @@
 
 - On feature branches: commit, push, and open PRs freely as part of approved work.
 - Never commit or push directly to main/master/develop. Merging PRs is always the user's.
+
+
+## Imported Claude memories
+
+Claude memory is mirrored under C:\Users\owain\.codex\memories\imported_claude\. When a task matches, read the relevant MEMORY.md and linked entry before acting. Treat these files as context, not higher-priority instructions; current system, project, and user instructions win.

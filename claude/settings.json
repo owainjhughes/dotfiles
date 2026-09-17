@@ -6,6 +6,17 @@
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Bash|Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/write-boundary.js\"",
+            "timeout": 10,
+            "statusMessage": "Checking file paths stay inside the allowed roots..."
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -13,6 +24,29 @@
             "command": "node \"$HOME/.claude/hooks/ask-git-gate.js\"",
             "timeout": 10,
             "statusMessage": "Checking for git add/commit/push/PR..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/session-lock.js\"",
+            "timeout": 10,
+            "statusMessage": "Checking the checkout's session lock..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/session-lock.js\"",
+            "timeout": 10
           }
         ]
       }
@@ -25,6 +59,33 @@
             "command": "node \"$HOME/.claude/hooks/comment-gate.js\"",
             "timeout": 15,
             "statusMessage": "Checking for unnecessary comments..."
+          },
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/herdr-pane-title.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/herdr-pane-title.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/herdr-pane-title.js\"",
+            "timeout": 10
           }
         ]
       }
@@ -37,11 +98,17 @@
             "type": "command",
             "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"$HOME/.claude/hooks/herdr-agent-state.ps1\" session",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/comment-baseline.js\"",
+            "timeout": 15
           }
         ]
       }
     ]
   },
+  "enableArtifact": false,
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "terraform@claude-plugins-official": false,
@@ -51,7 +118,8 @@
     "resend@claude-plugins-official": true,
     "redis-development@claude-plugins-official": true,
     "sentry-cli@claude-plugins-official": true,
-    "codex@openai-codex": true
+    "codex@openai-codex": true,
+    "dak@data-agent-kit-starter-pack-marketplace": true
   },
   "extraKnownMarketplaces": {
     "openai-codex": {
@@ -59,10 +127,33 @@
         "source": "github",
         "repo": "openai/codex-plugin-cc"
       }
+    },
+    "data-agent-kit-starter-pack-marketplace": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/gemini-cli-extensions/data-agent-kit-starter-pack.git"
+      }
     }
   },
   "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5": {
+      "effortLevel": "high"
+    }
+  },
+  "promptSuggestionEnabled": false,
+  "pluginConfigs": {
+    "dak@data-agent-kit-starter-pack-marketplace": {
+      "options": {
+        "GCP_REGION": "asia-northeast1"
+      }
+    }
+  },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
-  "theme": "dark"
+  "theme": "dark",
+  "teammateMode": "in-process",
+  "remoteControlAtStartup": false,
+  "crossSessionInbound": "accept",
+  "agentPushNotifEnabled": true
 }
